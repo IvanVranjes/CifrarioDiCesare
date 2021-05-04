@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cifrario di cesare</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Cesare">
+    <meta name="keywords" content="JS, SAMT, cesare, cifrrio">
+    <meta name="author" content="Ivan Vranjes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" href="i1bvraiva_fav.png" type="image/x-icon">
+    <link rel="icon" href="i1bvraiva_fav.png" type="image/x-icon">
+
+    <!-- Chrome   Windows 10 -->
+    <!-- data creazione: 26.04.2021 data ultima modifica: 04.05.2021 -->
+</head>
+<style>
+    body {
+       background-color: rebeccapurple;
+    } 
+    
+    label {
+        color: whitesmoke;
+        font-size: 35px;
+    }
+
+    h1 {
+        text-align: center;
+        color: whitesmoke;
+        font-size: 55px;
+        font-style: oblique;
+    }
+
+    div {
+        text-align: center;
+    }
+
+    input {
+        background-color: whitesmoke;
+        font-size: xx-large;
+    }
+
+    button{
+        font-size: xx-large;
+    }
+</style>
+<body>
+<script>
+    function numeroRomano(num) {
+	    var numbers = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1],
+	        letters = ['m', 'cm', 'd', 'cd', 'c', 'xc', 'l', 'xl', 'x', 'ix', 'v', 'iv', 'i'],
+	        roman = '',
+	        N = num,
+	        i;
+
+	    if (num < 1) {
+	        return '';
+	    }
+	    if (num > 3999) {
+	        return 'n';
+	    }
+
+	    for (i = 0; i < numbers.length; i++) {
+	        while (N >= numbers[i]) {
+	            roman += letters[i];
+	            N -= numbers[i];
+	        }
+	    }
+	    return roman;
+    }
+
+    function codifica() {
+        var parola = document.getElementById("parola").value;
+        var key = parseInt(document.getElementById("chiave").value);
+        while (parola.match(/\d+/)) {
+            num = parola.match(/\d+/);
+            parola = parola.replace(num, numeroRomano(num));
+        }
+        while(key < 0){
+            key += 26;
+        }
+
+        var codifica = "";
+        for (i in parola) {
+            if(parola.charCodeAt(i) != 32){
+                if(parola.charCodeAt(i) < 97 || parola.charCodeAt(i) > 122){
+                    if(parola.charCodeAt(i) < 48 || parola.charCodeAt(i) > 57){
+                        codifica = "Caratteri non validi";
+                        break;
+                    }
+                }
+            }
+            if(parola.charCodeAt(i) >= 97 && parola.charCodeAt(i) <= 122){
+                codifica += String.fromCharCode((((parola.charCodeAt(i) + key - 97) % 26) + 97));
+            }
+        }
+        document.getElementById("tcifrato").value = codifica.replace(/\s/g, '');
+    }
+</script>
+    <div>
+        <h1>Cifrario di Cesare by Ivan Vranješ</h1><br><br><br><br><br><br><br><br>
+        <label>Chiave</label>&nbsp; &nbsp;<input id="chiave" type="text" oninput="codifica()"><br><br>
+        <label>Testo da cifrare</label>&nbsp; &nbsp;<input type="text" id="parola" name="parola" oninput="codifica()" /><br><br>
+        <label>Testo cifrato</label>&nbsp; &nbsp;<input id="tcifrato" type="text">
+        <button type="button" onclick="location.reload()">Clear</button><br><br>
+    </div>
+</body>
+</html>
